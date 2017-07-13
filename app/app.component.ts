@@ -1,59 +1,47 @@
 import { Component } from '@angular/core';
+import { Food } from './food.model';
 
 @Component({
   selector: 'my-app',
   template: `
-  <div class="container-fluid">
+  <div class="container">
+   <div class="row">
+     <h2>Meal Tracker App</h2>
+   </div>
+   <button (click)="toggleForm()">ENTER FOOD LOG</button>
+   <div *ngIf="showFORM">
 
-    <h1>Meal Tracker App</h1>
-  <div class="col-md-6">
-  <div class="menuForm" *ngFor="let meal of meals">
+   <food-list (clickSender)="addName($event)">
+   </food-list>
+   </div>
 
-    <h3> {{ meal.name }}</h3>
-    <button (click)="showDetails(meal)">Submit</button>
-  </div>
-  </div>
+    <div class="row">
+     <div>
+     <h3>Food Menu</h3>
+     <edit-food [foods]="meals"></edit-food>
 
-    <div class="col-md-6">
-    <div *ngIf="selectedFood" class="col-md-6">
-      <h1>Edit Form</h1>
-      <div>
-      <label>Enter Food Name:</label>
-      <input [(ngModel)]="selectedFood.name">
     </div>
-    <div>
-      <label>Enter Food Details:</label>
-      <input [(ngModel)]="selectedFood.details">
-    </div>
-    <div>
-    <label>Enter Food Name:</label>
-    <input [(ngModel)]="selectedFood.calories">
-    <button (click)="doneEditing()">Done</button>
      </div>
-    </div>
-  </div>
-  </div>
-  `
+     </div>
+
+ `
 })
 
 export class AppComponent {
-  public meals: Food[] = [
-    new Food("Pilau","served hot with kachumbari",220),
-    new Food("Spaghetti","cooked with meatballs",370),
-    new Food("Chapati","soft chapatis",100),
-    new Food("Ugali","real energy-giving food",180),
-    new Food("Hamburger","extra cheese on the burger",400)
-  ];
-  selectedFood: Food = null;
-  showDetails(clickedFood: Food) {
-    this.selectedFood = clickedFood;
-  }
-  doneEditing() {
-   this.selectedFood = null;
- }
-}
+  public meals: Food[] = [];
+  showFORM = false;
 
-export class Food{
-  public done: boolean = false;
-  constructor(public name:string, public details:string, public calories:number){ }
+
+ addName(newMealFromChild:Food) {
+    this.meals.push(newMealFromChild);
+    console.log("piano")
+
+ }
+  toggleForm() {
+    if (this.showFORM == false) {
+      this.showFORM = true;
+    }
+    else { this.showFORM = false }
+  }
+
 }
